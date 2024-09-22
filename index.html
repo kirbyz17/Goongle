@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, inital-scale=1.0">
+  <title>Search Box Page</title>
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+  .search {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+.search h4{
+  margin: 50px 0px 20px 0px;
+  font-size: 70px;
+}
+
+.search input[type=text]{
+  width: 60%;
+  border-radius: 30px;
+  outline: none;
+  padding-left: 20px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  border: solid 2px purple;
+}
+
+.search a{
+  background-color: #fcfafa;
+  margin-top: 20px;
+  width: 150px;
+  text-align: center;
+  margin-left: 40px;
+}
+
+  .search a:hover{
+    background-color: #d6edf3;
+  }
+
+  #results {
+  margin-top: 50px; /* Increase the margin to move the results lower */
+  display: none; /* Hide until search results appear */
+}
+
+
+</style>
+<body>
+
+<!-- Goonle -->
+<div class="search">
+  <h4>Goongle</h4>
+  <input type="text" id="searchBar" placeholder="Search..." oninput="handleSearch()"><br>
+  
+  <!-- I'm Feeling Funky Button -->
+  <a href="#" class="btn" id="funkyBtn">I'm feeling funky</a>
+
+   <!-- Image Button -->
+   <a href="https://cdn.discordapp.com/attachments/1106822166240047175/1286837304245096529/standingxiao.png?ex=66ef5c21&is=66ee0aa1&hm=04c0907ab1aca6fb2ed3542ca333bcf6d2832992a167afd0cabe7d32f9e6a824&" target="_blank" class="btn">Image</a>
+
+    <!-- Search results section -->
+  <div id="results">
+    <h5>Search Results:</h5>
+    <ul id="linksList"></ul>
+  </div> 
+</div>
+
+<!-- JavaScript to handle random redirection -->
+<script>
+  document.getElementById('funkyBtn').addEventListener('click', function() {
+    // List of random websites to open
+    const websites = [
+      'https://drive.google.com/file/d/1MRhEiqGTBe3lXz6NPkx7yw13F4c_JyLf/view',
+      'https://www.instagram.com/reel/C_ASxVNxn4U/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+      'https://www.instagram.com/reel/C-V5VIivSez/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+      'https://www.youtube.com/shorts/c9j7aHEioEU',
+      'https://www.google.com/search?sca_esv=89608f5d4155dccd&sca_upv=1&rlz=1C1RXQR_enUS1041US1041&q=kot+gacek&source=lnms&fbs=AEQNm0DrkyAsj3-ytZzdGYQ--Lq3z9oZz8V7fxIGhCSQTvtb1LOltW8ou_VfCNH8BXaf-OmG862Rl3N72Djs_2JFrJJyUlqb6FK7svOjszT-RnAktAppzvebC-YaUqQGV4xT9E3p7VNBKqS9Gyu1E38SJw6YV9sgVsrdgwubePKWLOol0rAKG2LJmyk2-fDK3MCD-8Z-5xa_5r7-u0zqluSnuh-do6vwDw&sa=X&ved=2ahUKEwiX5Ou5vNOIAxV9KkQIHXKkMWoQ0pQJegQIExAB&biw=1920&bih=953&dpr=1',
+      'https://www.tiktok.com/@myselfxd2/photo/7414282893666618655?_d=secCgYIASAHKAESPgo8M%2FCl7EJ159zlh9RNmQi6rQuCYEOHDlGSSSe%2Ba6%2FVSh1D2fDvJLrVGv0HUNpbTOJPlxJE9LINdwA%2FoAxtGgA%3D&_r=1&aweme_type=150&checksum=da7f01bcd0bd509dc813c17c6e5320057cfd6432cc6ebceecd0168b27dfc4270&pic_cnt=2&preview_pb=0&sec_user_id=MS4wLjABAAAAV6k4RQsv3JU88M3_JrOBFBEhIOPmmQHDOzLynWWCtcVov4VFklrZztbk-Yrh8nzY&share_app_id=1180&share_item_id=7414282893666618655&share_link_id=291d691c-63fd-448b-9e09-7bfe868f6000&sharer_language=en&social_share_type=0&source=h5_m&timestamp=1726351473&u_code=a7c3f7e9hijmb&ug_btm=b2001&ugbiz_name=UNKNOWN&user_id=226319634852122624&utm_campaign=client_share&utm_medium=android&utm_source=copy',
+      'https://www.youtube.com/watch?v=0CdMqJ9Lidg',
+      'https://www.youtube.com/@JoeBiden',
+      'https://www.instagram.com/xiaojie_cat/',
+      'https://www.amazon.com/Wet-Paint-Printing-Design-Cardboard/dp/B089QVLNHF/ref=sr_1_1_sspa?crid=3I8DY6XN96NEN&dib=eyJ2IjoiMSJ9.TQ8WRSEQd9EAnA-lKckZzOFKBjMj5rZ353Qcz_hx1x3pf0OM_-hKIb9e_0YpZec0YQoP8ZX8tYOKYZ4tPvkH6VAhZfXoI_In__nXQjBBPECNNB2up3NJerorSgNQIm0MDkyHgfhqYz5qdAyvqVJoVxNkaM5fJJIEP_PlgoEd4o4OFcRmP7aoiYImhtfM6NOSMLILwq-2ZbEYUw7wfKJQ48PDMxK7lIkGWBpnP86trcQL3qD53-nDrhpnTtfjZbQXhiR4B6Ntr0VZxfmuDpSii48VZTQVHxqyIZvfXNKoaXk._8G_nC8RMIWpoLnpdpZ5lUb3pyxLBe1wbRGCJZJxKR4&dib_tag=se&keywords=obama+cardboard+cut+out&qid=1726901962&sprefix=obama+card%2Caps%2C152&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1',
+      'https://www.youtube.com/watch?v=Jt1GRckaQ_s',
+      'https://tenor.com/view/weevils-cement-forced-to-eat-cement-cement-spinning-spin-gif-4655161277358903712',
+      'https://www.youtube.com/watch?v=AFGh7eZpgqM&list=WL',
+      'https://www.youtube.com/watch?v=a5uQMwRMHcs',
+      'https://www.tiktok.com/@starkflims/video/7415027535131479327?_r=1&_t=8plMQ8kClII',
+      'https://www.youtube.com/@littlechineseeverywhere',
+      'https://www.youtube.com/@starkid',
+      'https://media.discordapp.net/attachments/978929616922214412/1087752780506202143/cali_creepin.gif?ex=66eedfb8&is=66ed8e38&hm=e318c5892db0285e23ebb7ccfa6c1d070e959f0993f9966dc6c611582e10783c&',
+      'https://www.youtube.com/watch?v=ceGMbtWLGZo'
+    ];
+    
+    // Get a random website from the array
+    const randomWebsite = websites[Math.floor(Math.random() * websites.length)];
+    
+    // Open the random website in a new tab
+    window.open(randomWebsite, '_blank');
+  });
+
+   // Function for handling search bar input
+   function handleSearch() {
+    const input = document.getElementById('searchBar').value.toLowerCase(); // Get search input and convert to lowercase
+    const resultsDiv = document.getElementById('results');
+    const linksList = document.getElementById('linksList');
+    linksList.innerHTML = ''; // Clear previous search results
+    
+      // Predefined search terms and corresponding links
+    const searchResults = [
+      { terms: ['isa', 'istha', 'stellabella', 'isabella'], links: ['https://www.instagram.com/singerlove5091/','https://gamequitters.com/how-to-quit-playing-league-of-legends/', 'https://www.indeed.com/', 'https://www.nhs.uk/conditions/hip-replacement/', 'https://psychcentral.com/quizzes/autism-test#take-the-quiz','https://www.reddit.com/r/Bakersfield/comments/154k1g3/why_are_californians_moving_to_texas_instead_of/'] },
+      { terms: ['iliana', 'curly fries'], links: ['https://www.pinterest.com/finlandiacheese/cute-cows/','https://www.baskinrobbins.com/en', 'https://www.pinterest.com/unicornflight7/cute-baby-pigs/', 'https://www.reddit.com/r/Bakersfield/comments/154k1g3/why_are_californians_moving_to_texas_instead_of/'] },
+      { terms: ['mhico', 'sexy'], links: ['https://uci.edu/', 'https://www.shutterstock.com/search/buff-guy','https://www.merriam-webster.com/dictionary/sexy'] },
+      { terms: ['vegan', 'vegan diet'], links: ['https://www.health.harvard.edu/nutrition/what-is-the-carnivore-diet','https://www.healthline.com/nutrition/carnivore-diet','https://en.wikipedia.org/wiki/Carnivore_diet','https://ourworldindata.org/meat-production'] },
+      { terms: ['stephanie', 'tax fraud', 'satanfrog'], links: ['https://www.reddit.com/r/foraging/comments/kcvnks/buff_frog_dinner_for_whole_family/','https://hellokitty.fandom.com/wiki/Chococat','https://www.tedcruz.org/', 'https://www.dictionary.com/browse/sentient','https://www.texas.gov/'] },
+      { terms: ['rainy', 'sara', 'rainyartist'], links: ['https://www.instagram.com/rainy_artist/','https://www.dreamworks.com/trolls','https://pony.town/','https://www.indeed.com/'] },
+      { terms: ['ray', 'raymond', 'kirby'], links: ['https://www.instagram.com/xiaojie_cat/','https://www.amazon.com/Funny-Trump-Kissing-Enemies-Lovers/dp/B0CWLLX126','https://en.wikipedia.org/wiki/Femboy'] }
+    ];
+
+    let hasResults = false;
+
+    // Check if the input matches any keyword in the searchResults array
+    searchResults.forEach(result => {
+      result.terms.forEach(term => {
+        if (input.includes(term)) {
+          // If there's a match, create a list item for each link
+          result.links.forEach(linkURL => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = linkURL;
+            link.textContent = linkURL; // Display the URL as the clickable text
+            link.target = '_blank'; // Open in a new tab
+            link.className = 'url'; // Apply styling
+
+            listItem.appendChild(link);
+            linksList.appendChild(listItem);
+            hasResults = true;
+          });
+        }
+      });
+    });
+    
+    // Show or hide the results div based on whether we have matches
+    if (hasResults) {
+      resultsDiv.style.display = 'block';
+    } else {
+      resultsDiv.style.display = 'none';
+    }
+  }
+</script> 
+
+<body>
+</html> 
